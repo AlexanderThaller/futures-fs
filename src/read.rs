@@ -1,16 +1,16 @@
-use std::{cmp, fmt, mem};
 use std::fs::{File, Metadata};
 use std::io::{self, Read};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use std::{cmp, fmt, mem};
 
 use bytes::{BufMut, Bytes, BytesMut};
-use futures::{Async, Future, Poll, Stream};
 use futures::future::lazy;
 use futures::sync::oneshot;
+use futures::{Async, Future, Poll, Stream};
 
-use FsPool;
 use FsFuture;
+use FsPool;
 
 const BUF_SIZE: usize = 8192;
 
@@ -90,11 +90,13 @@ impl FsReadStream {
     ) -> Poll<Option<<Self as Stream>::Item>, <Self as Stream>::Error> {
         if chunk.is_empty() {
             self.state = State::Eof;
-            return Ok(Async::Ready(None));
+
+            Ok(Async::Ready(None))
         } else {
             self.buffer = chunk;
             self.state = State::Ready(file, buf_size);
-            return Ok(Async::Ready(Some(self.buffer.take().freeze())));
+
+            Ok(Async::Ready(Some(self.buffer.take().freeze())))
         }
     }
 }

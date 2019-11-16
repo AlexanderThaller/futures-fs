@@ -4,12 +4,12 @@ use std::io::{self, Write};
 use std::path::Path;
 
 use bytes::Bytes;
-use futures::{Async, AsyncSink, Future, Poll, Sink, StartSend};
 use futures::future::lazy;
 use futures::sync::oneshot;
+use futures::{Async, AsyncSink, Future, Poll, Sink, StartSend};
 
-use FsPool;
 use FsFuture;
+use FsPool;
 
 pub(crate) fn new<P>(pool: &FsPool, path: P, opts: WriteOptions) -> FsWriteSink
 where
@@ -64,7 +64,7 @@ impl Default for WriteOptions {
 
 impl From<OpenOptions> for WriteOptions {
     fn from(open: OpenOptions) -> WriteOptions {
-        WriteOptions { open: open }
+        WriteOptions { open }
     }
 }
 
@@ -106,7 +106,8 @@ impl Sink for FsWriteSink {
             let (tx, rx) = oneshot::channel();
 
             let fut = Box::new(lazy(move || {
-                let res = file.write_all(item.as_ref())
+                let res = file
+                    .write_all(item.as_ref())
                     .map(|_| file)
                     .map_err(From::from);
 

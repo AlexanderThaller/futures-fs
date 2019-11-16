@@ -54,7 +54,7 @@ mod write;
 /// A pool of threads to handle file IO.
 #[derive(Clone)]
 pub struct FsPool {
-    executor: Arc<Executor<Box<Future<Item = (), Error = ()> + Send>> + Send + Sync>,
+    executor: Arc<dyn Executor<Box<dyn Future<Item = (), Error = ()> + Send>> + Send + Sync>,
 }
 
 // ===== impl FsPool ======
@@ -80,7 +80,7 @@ impl FsPool {
     /// `FsPool` and any other things needing a thread pool.
     pub fn with_executor<E>(executor: E) -> Self
     where
-        E: Executor<Box<Future<Item = (), Error = ()> + Send>> + Send + Sync + 'static,
+        E: Executor<Box<dyn Future<Item = (), Error = ()> + Send>> + Send + Sync + 'static,
     {
         FsPool {
             executor: Arc::new(executor),
@@ -91,7 +91,7 @@ impl FsPool {
     #[deprecated(note = "renamed to with_executor")]
     pub fn from_executor<E>(executor: E) -> Self
     where
-        E: Executor<Box<Future<Item = (), Error = ()> + Send>> + Send + Sync + 'static,
+        E: Executor<Box<dyn Future<Item = (), Error = ()> + Send>> + Send + Sync + 'static,
     {
         FsPool {
             executor: Arc::new(executor),
