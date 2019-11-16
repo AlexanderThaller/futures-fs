@@ -1,9 +1,9 @@
 extern crate futures;
 extern crate futures_fs;
 
-use std::{env, fs, io};
 use futures::{Future, Sink, Stream};
 use futures_fs::FsPool;
+use std::{env, fs, io};
 
 #[test]
 fn test_smoke() {
@@ -23,7 +23,8 @@ fn test_smoke() {
         .wait()
         .unwrap();
 
-    let data = fs.read(tmp.clone(), Default::default())
+    let data = fs
+        .read(tmp.clone(), Default::default())
         .collect()
         .wait()
         .unwrap()
@@ -75,7 +76,8 @@ fn test_from_file_smoke() {
 
     let file = fs::File::open(&tmp).unwrap();
 
-    let data = fs.read_file(file, Default::default())
+    let data = fs
+        .read_file(file, Default::default())
         .collect()
         .wait()
         .unwrap()

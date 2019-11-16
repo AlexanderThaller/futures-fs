@@ -36,13 +36,13 @@ extern crate bytes;
 extern crate futures;
 extern crate futures_cpupool;
 
-use std::{fmt, fs, io};
 use std::path::Path;
 use std::sync::Arc;
+use std::{fmt, fs, io};
 
-use futures::{Async, Future, Poll};
 use futures::future::{lazy, Executor};
 use futures::sync::oneshot::{self, Receiver};
+use futures::{Async, Future, Poll};
 use futures_cpupool::CpuPool;
 
 pub use self::read::{FsReadStream, ReadOptions};
@@ -153,7 +153,6 @@ impl fmt::Debug for FsPool {
         f.debug_struct("FsPool").finish()
     }
 }
-
 
 // ===== impl FsFuture =====
 
